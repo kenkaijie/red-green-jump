@@ -53,20 +53,34 @@ public class PlayerController : MonoBehaviour
         _rigidBody.angularVelocity = 0f;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (PlayerColor == PlayerColorType.Red)
+            {
+                TransitionPlayerColor(PlayerColorType.Green);
+            }
+            else
+            {
+                TransitionPlayerColor(PlayerColorType.Red);
+            }
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.T) && PlayerColor != PlayerColorType.Green)
+        if (PlayerColor == PlayerColorType.Red)
         {
-            TransitionPlayerColor(PlayerColorType.Green);
             _spriteRenderer.sprite = GreenSprite;
         }
-        else if (Input.GetKey(KeyCode.Y) && PlayerColor != PlayerColorType.Red)
+        else
         {
-            TransitionPlayerColor(PlayerColorType.Red);
             _spriteRenderer.sprite = RedSprite;
         }
-        else if ((PlayerMovement == PlayerMovementType.Jumping) && (_rigidBody.position.y <= 0.02f))
+
+        if ((PlayerMovement == PlayerMovementType.Jumping) && (_rigidBody.position.y <= 0.02f))
         {
             TransitionPlayerMovement(PlayerMovementType.Idle);
             _rigidBody.MovePosition(Vector2.zero);
