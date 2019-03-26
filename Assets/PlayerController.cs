@@ -53,20 +53,34 @@ public class PlayerController : MonoBehaviour
         _rigidBody.angularVelocity = 0f;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (PlayerColor == PlayerColorType.Red)
+            {
+                TransitionPlayerColor(PlayerColorType.Green);
+            }
+            else
+            {
+                TransitionPlayerColor(PlayerColorType.Red);
+            }
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.T) && PlayerColor != PlayerColorType.Green)
+        if (PlayerColor == PlayerColorType.Red)
         {
-            TransitionPlayerColor(PlayerColorType.Green);
+            _spriteRenderer.sprite = RedSprite; 
+        }
+        else
+        {
             _spriteRenderer.sprite = GreenSprite;
         }
-        else if (Input.GetKey(KeyCode.Y) && PlayerColor != PlayerColorType.Red)
-        {
-            TransitionPlayerColor(PlayerColorType.Red);
-            _spriteRenderer.sprite = RedSprite;
-        }
-        else if ((PlayerMovement == PlayerMovementType.Jumping) && (_rigidBody.position.y <= 0.02f))
+
+        if ((PlayerMovement == PlayerMovementType.Jumping) && (_rigidBody.position.y <= 0.02f))
         {
             TransitionPlayerMovement(PlayerMovementType.Idle);
             _rigidBody.MovePosition(Vector2.zero);
@@ -82,6 +96,7 @@ public class PlayerController : MonoBehaviour
             _rigidBody.AddForce(new Vector2(0, -0.2f*jumpForce), ForceMode2D.Impulse);
         }
 
+        GameController.GetGameController().GameTimeScore += Time.fixedDeltaTime;
 
     }
 
@@ -113,16 +128,29 @@ public class PlayerController : MonoBehaviour
         {
             if (IsCollided(obsProps.Color, PlayerColor))
             {
-                Debug.Log("Collided");
+                Debug.Log(string.Format("Collided {0} -> {1}", PlayerColor, obsProps.Color));
+                GameController.GetGameController().GameCollideScore += GameController.IncorrectCollideScore;
+            }
+            else
+            {
+                GameController.GetGameController().GameCollideScore += GameController.CorrectCollideScore;
             }
         }
     }
 
     private bool IsCollided(ObstacleColorType obstacleColor, PlayerColorType playerColor)
     {
-        bool returnValue = !((playerColor == PlayerColorType.Green) && (obstacleColor == ObstacleColorType.Green) ||
-            (playerColor == PlayerColorType.Red) && (obstacleColor == ObstacleColorType.Red) ||
-            (obstacleColor == ObstacleColorType.White));
-        return returnValue;
+        bool isCollide = false;
+
+        if (playerColor == PlayerColorType.Green)
+        {
+            isCollide = (obstacleColor == ObstacleColorType.Black) || (obstacleColor == ObstacleColorType.Red);
+        }
+        else
+        {
+            isCollide = (obstacleColor == ObstacleColorType.Black) || (obstacleColor == ObstacleColorType.Green);
+        }
+
+        return isCollide;
     }
 }
