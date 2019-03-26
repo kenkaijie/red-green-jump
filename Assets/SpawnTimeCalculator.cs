@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SpawnTimeCalculator : MonoBehaviour
 {
+    public float ConstantSpawnSpeed = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,6 @@ public class SpawnTimeCalculator : MonoBehaviour
 
     public float CalculateSecondsToNextSpawn()
     {
-        return 0.5f;
+        return ConstantSpawnSpeed;
     }
 }
