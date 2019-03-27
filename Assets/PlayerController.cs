@@ -52,6 +52,12 @@ public class PlayerController : MonoBehaviour
         _rigidBody.velocity = Vector2.zero;
         _rigidBody.angularVelocity = 0f;
     }
+    float Vx;
+    float Vy;
+    public float JumpHeightUnits = 4f;
+    public float JumpWidthUnits = 3.5f;
+
+    private float TimeSinceStartJump = 0f;
 
     private void Update()
     {
@@ -66,8 +72,12 @@ public class PlayerController : MonoBehaviour
                 TransitionPlayerColor(PlayerColorType.Red);
             }
         }
+        else if ((Input.GetAxis("Vertical") > 0) && (PlayerMovement == PlayerMovementType.Idle))
+        {
+            TransitionPlayerMovement(PlayerMovementType.Jumping);
+            TimeSinceStartJump = 0f;
+        }
     }
-
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -80,20 +90,23 @@ public class PlayerController : MonoBehaviour
             _spriteRenderer.sprite = GreenSprite;
         }
 
-        if ((PlayerMovement == PlayerMovementType.Jumping) && (_rigidBody.position.y <= 0.02f))
+        if ((PlayerMovement == PlayerMovementType.Jumping))
         {
-            TransitionPlayerMovement(PlayerMovementType.Idle);
-            _rigidBody.MovePosition(Vector2.zero);
-        }
-        else if ((Input.GetAxis("Vertical") > 0) && (PlayerMovement == PlayerMovementType.Idle))
-        {
-            TransitionPlayerMovement(PlayerMovementType.Jumping);
-            _rigidBody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-        }
-        else if ((Input.GetAxis("Vertical") < 0) && (PlayerMovement == PlayerMovementType.Jumping))
-        {
-            TransitionPlayerMovement(PlayerMovementType.Jumping);
-            _rigidBody.AddForce(new Vector2(0, -0.2f*jumpForce), ForceMode2D.Impulse);
+            float nextPositionY = JumpHeightUnits * Mathf.Sin(Mathf.Abs(GameController.GetGameController().GlobalGameMoveSpeed.x) * Mathf.PI / JumpWidthUnits * TimeSinceStartJump);
+            Vector2 nextPosition = _rigidBody.position;
+            nextPosition.y = nextPositionY;
+            if (nextPosition.y < 0f)
+            {
+                TransitionPlayerMovement(PlayerMovementType.Idle);
+                Vector2 zeroPosition = _rigidBody.position;
+                zeroPosition.y = 0f;
+                _rigidBody.MovePosition(zeroPosition);
+            }
+            else
+            {
+                _rigidBody.MovePosition(nextPosition);
+            }
+            TimeSinceStartJump += Time.fixedDeltaTime;
         }
 
         GameController.GetGameController().GameTimeScore += Time.fixedDeltaTime;
