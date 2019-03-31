@@ -10,6 +10,7 @@ public enum GameModeType
     Score,
     Time
 }
+
 public enum GameStateType
 {
     /// <summary>
@@ -45,8 +46,8 @@ public class GameController: MonoBehaviour
     private int _gameCollideScore;
     public int GameCollideScore { get => _gameCollideScore; set => _gameCollideScore = Math.Max(0, value); }
     public float GameTimeScore { get; set; }
-    public GameModeType GameMode { get; internal set; }
-    public GameStateType GameState { get; private set; }
+    public GameModeType GameMode;
+    public GameStateType GameState;
 
     public InputManager inputManager;
     public OnGameStateChangedEvent OnGameStateChanged = new OnGameStateChangedEvent();

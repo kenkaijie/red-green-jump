@@ -17,7 +17,7 @@ public class ScoreOverlay : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (gamecontroller.GameMode == GameModeType.Time)
+        if (gamecontroller.GameMode == GameModeType.Score)
         {
             _text.text = string.Format("Game Score: {0}", gamecontroller.GameCollideScore);
         }

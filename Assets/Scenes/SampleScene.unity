@@ -954,7 +954,7 @@ MonoBehaviour:
   inputManager: {fileID: 1364778109}
   gameController: {fileID: 1364778110}
   JumpHeightUnits: 4
-  JumpWidthUnits: 3.5
+  JumpWidthUnits: 5
 --- !u!61 &714836050
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1050,7 +1050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &850673463
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1561,8 +1561,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IncorrectCollideScore: -3
   CorrectCollideScore: 1
-  GlobalGameMoveSpeed: {x: -11, y: 0}
+  GlobalGameMoveSpeed: {x: -9, y: 0}
   inputManager: {fileID: 1364778109}
+  CountdownTextField: {fileID: 850673462}
 --- !u!1 &1374758946
 GameObject:
   m_ObjectHideFlags: 0
