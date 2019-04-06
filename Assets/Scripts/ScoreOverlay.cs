@@ -7,24 +7,23 @@ using UnityEngine.UI;
 public class ScoreOverlay : MonoBehaviour
 {
     private Text _text;
-    private GameController _gamecontroller;
+    public GameController gamecontroller;
     // Start is called before the first frame update
     void Start()
     {
-        _gamecontroller = GameController.GetGameController();
         _text = GetComponent<Text>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (_gamecontroller.GameMode == GameType.Time)
+        if (gamecontroller.GameMode == GameModeType.Score)
         {
-            _text.text = string.Format("Game Score: {0}", _gamecontroller.GameCollideScore);
+            _text.text = string.Format("Game Score: {0}", gamecontroller.GameCollideScore);
         }
         else
         {
-            _text.text = string.Format("Time {0}",TimeSpan.FromSeconds(_gamecontroller.GameTimeScore));
+            _text.text = string.Format("Time {0}",TimeSpan.FromSeconds(gamecontroller.GameTimeScore));
         }
         
     }

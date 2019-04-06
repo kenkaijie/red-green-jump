@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,17 +13,11 @@ public class OnColorChangedEvent: UnityEvent<PlayerColorType>
 
 public class PlayerController : MonoBehaviour
 {
-    public Sprite GreenSprite;
-    public Sprite RedSprite;
-
-    SpriteRenderer _spriteRenderer;
-
-    private Sprite currentSprite;
-
-    public OnColorChangedEvent OnColorChanged;
+    public OnColorChangedEvent OnColorChanged = new OnColorChangedEvent();
 
     private Rigidbody2D _rigidBody;
     public float jumpForce = 7f;
+    private Animator _animator;
 
     [SerializeField]
     private PlayerColorType _playerColor;
@@ -32,15 +27,51 @@ public class PlayerController : MonoBehaviour
     private PlayerMovementType _playerMovement;
     public PlayerMovementType PlayerMovement { get => _playerMovement; private set => _playerMovement = value; }
 
+    public InputManager inputManager;
+    public GameController gameController;
+
     // Start is called before the first frame update
     void Start()
     {
+        enabled = false;
+        gameController.OnGameStateChanged.AddListener(OnGameStateChanged);
         _rigidBody = GetComponent<Rigidbody2D>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
         TransitionPlayerColor(PlayerColorType.Green);
         TransitionPlayerMovement(PlayerMovementType.Idle);
-        currentSprite = GreenSprite;
-        OnColorChanged = new OnColorChangedEvent();
+        inputManager.OnKeyPressed.AddListener(OnKeyPressed);
+    }
+
+    private void OnGameStateChanged(GameStateType gameState)
+    {
+        switch (gameState)
+        {
+            case GameStateType.Running:
+                enabled = true;
+                break;
+            default:
+                enabled = false;
+                break;
+        }
+    }
+
+    private void OnKeyPressed(KeyCode key)
+    {
+        switch (key)
+        {
+            case KeyCode.T:
+                if (PlayerColor == PlayerColorType.Red)
+                {
+                    TransitionPlayerColor(PlayerColorType.Green);
+                }
+                else
+                {
+                    TransitionPlayerColor(PlayerColorType.Red);
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void Reset()
@@ -61,18 +92,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            if (PlayerColor == PlayerColorType.Red)
-            {
-                TransitionPlayerColor(PlayerColorType.Green);
-            }
-            else
-            {
-                TransitionPlayerColor(PlayerColorType.Red);
-            }
-        }
-        else if ((Input.GetAxis("Vertical") > 0) && (PlayerMovement == PlayerMovementType.Idle))
+        if ((inputManager.GetVerticalAxis() > 0) && (PlayerMovement == PlayerMovementType.Idle))
         {
             TransitionPlayerMovement(PlayerMovementType.Jumping);
             TimeSinceStartJump = 0f;
@@ -81,18 +101,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (PlayerColor == PlayerColorType.Red)
-        {
-            _spriteRenderer.sprite = RedSprite; 
-        }
-        else
-        {
-            _spriteRenderer.sprite = GreenSprite;
-        }
-
         if ((PlayerMovement == PlayerMovementType.Jumping))
         {
-            float nextPositionY = JumpHeightUnits * Mathf.Sin(Mathf.Abs(GameController.GetGameController().GlobalGameMoveSpeed.x) * Mathf.PI / JumpWidthUnits * TimeSinceStartJump);
+            float nextPositionY = JumpHeightUnits * Mathf.Sin(Mathf.Abs(gameController.GlobalGameMoveSpeed.x) * Mathf.PI / JumpWidthUnits * TimeSinceStartJump);
             Vector2 nextPosition = _rigidBody.position;
             nextPosition.y = nextPositionY;
             if (nextPosition.y < 0f)
@@ -109,7 +120,7 @@ public class PlayerController : MonoBehaviour
             TimeSinceStartJump += Time.fixedDeltaTime;
         }
 
-        GameController.GetGameController().GameTimeScore += Time.fixedDeltaTime;
+        gameController.GameTimeScore += Time.fixedDeltaTime;
 
     }
 
@@ -120,6 +131,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Transitioning player Color from" + PlayerMovement + " -> " + newMovement);
             PlayerMovement = newMovement;
+            _animator.SetBool("IsJumping", newMovement == PlayerMovementType.Jumping);
         }
     }
 
@@ -129,6 +141,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Transitioning player Color from" + PlayerColor + " -> " + newColor);
             PlayerColor = newColor;
+            _animator.SetBool("IsGreen", newColor == PlayerColorType.Green);
         }
     }
 
@@ -142,11 +155,11 @@ public class PlayerController : MonoBehaviour
             if (IsCollided(obsProps.Color, PlayerColor))
             {
                 Debug.Log(string.Format("Collided {0} -> {1}", PlayerColor, obsProps.Color));
-                GameController.GetGameController().GameCollideScore += GameController.IncorrectCollideScore;
+                gameController.GameCollideScore += gameController.IncorrectCollideScore;
             }
             else
             {
-                GameController.GetGameController().GameCollideScore += GameController.CorrectCollideScore;
+                gameController.GameCollideScore += gameController.CorrectCollideScore;
             }
         }
     }
