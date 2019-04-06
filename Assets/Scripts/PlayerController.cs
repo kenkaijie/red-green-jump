@@ -13,17 +13,11 @@ public class OnColorChangedEvent: UnityEvent<PlayerColorType>
 
 public class PlayerController : MonoBehaviour
 {
-    public Sprite GreenSprite;
-    public Sprite RedSprite;
-
-    SpriteRenderer _spriteRenderer;
-
-    private Sprite currentSprite;
-
     public OnColorChangedEvent OnColorChanged = new OnColorChangedEvent();
 
     private Rigidbody2D _rigidBody;
     public float jumpForce = 7f;
+    private Animator _animator;
 
     [SerializeField]
     private PlayerColorType _playerColor;
@@ -42,10 +36,9 @@ public class PlayerController : MonoBehaviour
         enabled = false;
         gameController.OnGameStateChanged.AddListener(OnGameStateChanged);
         _rigidBody = GetComponent<Rigidbody2D>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
         TransitionPlayerColor(PlayerColorType.Green);
         TransitionPlayerMovement(PlayerMovementType.Idle);
-        currentSprite = GreenSprite;
         inputManager.OnKeyPressed.AddListener(OnKeyPressed);
     }
 
@@ -108,15 +101,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (PlayerColor == PlayerColorType.Red)
-        {
-            _spriteRenderer.sprite = RedSprite; 
-        }
-        else
-        {
-            _spriteRenderer.sprite = GreenSprite;
-        }
-
         if ((PlayerMovement == PlayerMovementType.Jumping))
         {
             float nextPositionY = JumpHeightUnits * Mathf.Sin(Mathf.Abs(gameController.GlobalGameMoveSpeed.x) * Mathf.PI / JumpWidthUnits * TimeSinceStartJump);
@@ -147,6 +131,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Transitioning player Color from" + PlayerMovement + " -> " + newMovement);
             PlayerMovement = newMovement;
+            _animator.SetBool("IsJumping", newMovement == PlayerMovementType.Jumping);
         }
     }
 
@@ -156,6 +141,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Transitioning player Color from" + PlayerColor + " -> " + newColor);
             PlayerColor = newColor;
+            _animator.SetBool("IsGreen", newColor == PlayerColorType.Green);
         }
     }
 

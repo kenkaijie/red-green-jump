@@ -709,7 +709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AssetsPPU: 32
+  m_AssetsPPU: 16
   m_RefResolutionX: 500
   m_RefResolutionY: 250
   m_UpscaleRT: 0
@@ -743,7 +743,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.7061667
+  orthographic size: 2.92
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -865,6 +865,7 @@ GameObject:
   - component: {fileID: 714836051}
   - component: {fileID: 714836050}
   - component: {fileID: 714836047}
+  - component: {fileID: 714836048}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -909,7 +910,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8d32a1fc70ce6d64c887748f4f579be8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a4fb7a6422ec8c94e9885fde137644e6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -928,7 +929,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 714836044}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5, y: 0, z: -3}
+  m_LocalPosition: {x: -3, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1364778108}
@@ -946,8 +947,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bd41fc2d23b6db429e099c4d8e9ed40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GreenSprite: {fileID: 21300000, guid: 8d32a1fc70ce6d64c887748f4f579be8, type: 3}
-  RedSprite: {fileID: 21300002, guid: 8d32a1fc70ce6d64c887748f4f579be8, type: 3}
   jumpForce: 25
   _playerColor: 0
   _playerMovement: 0
@@ -955,6 +954,25 @@ MonoBehaviour:
   gameController: {fileID: 1364778110}
   JumpHeightUnits: 4
   JumpWidthUnits: 5
+--- !u!95 &714836048
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714836044}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 317dde026b3f64948b274ea25e110a78, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!61 &714836050
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -972,7 +990,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
-    oldSize: {x: 2, y: 2}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 2, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -1562,6 +1580,8 @@ MonoBehaviour:
   IncorrectCollideScore: -3
   CorrectCollideScore: 1
   GlobalGameMoveSpeed: {x: -9, y: 0}
+  GameMode: 0
+  GameState: 0
   inputManager: {fileID: 1364778109}
   CountdownTextField: {fileID: 850673462}
 --- !u!1 &1374758946
