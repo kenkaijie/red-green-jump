@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class ParticleSystemPause : MonoBehaviour
 {
-    [SerializeField]
-    private GameController _gameController;
-
+    public GameController _gameController;
     private ParticleSystem _particleSystem;
 
     private void Start()
