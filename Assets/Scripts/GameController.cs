@@ -22,6 +22,10 @@ public enum GameStateType
     /// </summary>
     Running,
     /// <summary>
+    /// Game is about to resume
+    /// </summary>
+    Resuming,
+    /// <summary>
     /// Pause has been requested
     /// </summary>
     Paused,
@@ -49,6 +53,7 @@ public class GameController: MonoBehaviour
     public GameModeType GameMode;
     public GameStateType GameState;
 
+    public GameObject PauseMenu;
     public InputManager inputManager;
     public OnGameStateChangedEvent OnGameStateChanged = new OnGameStateChangedEvent();
     public GameObject CountdownTextField;
@@ -60,10 +65,13 @@ public class GameController: MonoBehaviour
         inputManager.OnKeyPressed.AddListener(OnKeyPressed);
         ResetScore();
         StartCoroutine(CountdownResume());
+        PauseMenu.SetActive(false);
     }
 
     IEnumerator CountdownResume()
     {
+        PauseMenu.SetActive(false);
+        TransitionGameState(GameStateType.Resuming);
         CountdownTextField.SetActive(true);
         Text textfield = CountdownTextField.GetComponent<Text>();
         textfield.text = "3";
@@ -119,6 +127,7 @@ public class GameController: MonoBehaviour
     {
         TransitionGameState(GameStateType.Paused);
         GlobalGameMoveSpeed = Vector2.zero;
+        PauseMenu.SetActive(true);
     }
 
     public void UnpauseGame()
