@@ -282,7 +282,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -418,7 +418,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnSuccessRate: 0.01
   DefaultPrefabList:
-  - {fileID: 564812792755018685, guid: d45728be1702a7242930dc36f865d8e2, type: 3}
+  - {fileID: 3828569313404949796, guid: d13f4125d635c6346bf7977f8fcce6e9, type: 3}
+  - {fileID: 2286422144097248766, guid: 6abf02dd1cbbf9042a45ec120db70815, type: 3}
   holdbackTime_s: 1
   gameController: {fileID: 1364778110}
 --- !u!114 &231094775
@@ -710,10 +711,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AssetsPPU: 16
-  m_RefResolutionX: 500
-  m_RefResolutionY: 250
+  m_RefResolutionX: 187
+  m_RefResolutionY: 138
   m_UpscaleRT: 0
-  m_PixelSnapping: 0
+  m_PixelSnapping: 1
   m_CropFrameX: 1
   m_CropFrameY: 1
   m_StretchFill: 1
@@ -929,7 +930,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 714836044}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: 0, z: -3}
+  m_LocalPosition: {x: -5, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1364778108}
@@ -1109,8 +1110,8 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 100
+    m_Font: {fileID: 12800000, guid: 8ff51497b91085e4482f327b01785948, type: 3}
+    m_FontSize: 96
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1579,7 +1580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IncorrectCollideScore: -3
   CorrectCollideScore: 1
-  GlobalGameMoveSpeed: {x: -9, y: 0}
+  GlobalGameMoveSpeed: {x: -7, y: 0}
   GameMode: 0
   GameState: 0
   inputManager: {fileID: 1364778109}
@@ -1820,11 +1821,11 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_Font: {fileID: 12800000, guid: 8ff51497b91085e4482f327b01785948, type: 3}
+    m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0

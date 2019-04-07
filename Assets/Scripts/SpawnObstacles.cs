@@ -52,10 +52,8 @@ public class SpawnObstacles : MonoBehaviour
 
                 var obstacle = Instantiate(DefaultPrefabList[randomIndex], transform.position, Quaternion.identity, transform);
                 obstacle.GetComponent<ObstacleMovement>().gameController = gameController;
-                ObstacleColorType randomColor = (ObstacleColorType)UnityEngine.Random.Range(0, (int)ObstacleColorType.Count);
-                obstacle.GetComponent<ObstacleProperties>().SetColor(randomColor);
                 timeToNextSpawn_s = TimeTillSpawn();
-                Debug.Log(string.Format("Spawning Obstacle Type: {0} ({1}), Next spawn in {2}s", randomIndex, randomColor, timeToNextSpawn_s));
+                Debug.Log(string.Format("Spawning Obstacle Type: {0} ({1}), Next spawn in {2}s", randomIndex, obstacle.name, timeToNextSpawn_s));
             }
             timeToNextSpawn_s -= Time.fixedDeltaTime;
         }

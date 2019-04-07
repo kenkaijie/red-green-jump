@@ -149,7 +149,7 @@ public class PlayerController : MonoBehaviour
     {
         // Check if collision can passthrough
         ObstacleProperties obsProps = collision.gameObject.GetComponent<ObstacleProperties>();
-
+        ObstacleMovement obsMove = collision.gameObject.GetComponent<ObstacleMovement>();
         if (obsProps != null)
         {
             if (IsCollided(obsProps.Color, PlayerColor))
@@ -160,6 +160,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 gameController.GameCollideScore += gameController.CorrectCollideScore;
+                obsMove.SetHit();
             }
         }
     }

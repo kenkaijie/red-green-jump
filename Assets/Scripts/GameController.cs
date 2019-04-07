@@ -81,7 +81,7 @@ public class GameController: MonoBehaviour
     public void StartGame()
     {
         TransitionGameState(GameStateType.Running);
-        GlobalGameMoveSpeed = new Vector2(-11f, 0);
+        GlobalGameMoveSpeed = new Vector2(-9f, 0);
     }
 
     private void TransitionGameState(GameStateType newState)

@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 564812792755018681}
   - component: {fileID: 564812792755018682}
   - component: {fileID: 564812792755018683}
-  - component: {fileID: 8474435933499418072}
+  - component: {fileID: 6312509269253465251}
+  - component: {fileID: 5684916439828900955}
   m_Layer: 0
-  m_Name: Obstacle
+  m_Name: Obstacle_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 564812792755018685}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -72,12 +73,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 64d4d8b6e5d62a7439b208f70ccc2431, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2199a7840e4bf1d469906e7264ae54c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -117,18 +118,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.3145876, y: 0.8149483}
+  m_Offset: {x: 0, y: 0.31384027}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
-    oldSize: {x: 4, y: 4}
-    newSize: {x: 2, y: 2}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.6208248, y: 1.4798965}
+  m_Size: {x: 0.3870787, y: 0.6264279}
   m_EdgeRadius: 0
 --- !u!114 &564812792755018683
 MonoBehaviour:
@@ -143,7 +144,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 0}
---- !u!114 &8474435933499418072
+  Velocity: {x: 0, y: 0}
+  _isHit: 0
+--- !u!114 &6312509269253465251
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,8 +158,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 603d181b7ce2bd44e8b6b6e1f8801247, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RedSprite: {fileID: 21300000, guid: a029f0001b4ae1d48b43e64a6f28e6b6, type: 3}
-  GreenSprite: {fileID: 21300000, guid: 64d4d8b6e5d62a7439b208f70ccc2431, type: 3}
-  BlackSprite: {fileID: 21300000, guid: 1edefd0ef01b7e542ad00fa0af665804, type: 3}
-  WhiteSprite: {fileID: 21300000, guid: 061d9f6cc9f78fc43b42ca3b9995a110, type: 3}
-  _color: 0
+  _color: 3
+--- !u!95 &5684916439828900955
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564812792755018685}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 48ea3d6196d0aa94fa255717907b29f9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
