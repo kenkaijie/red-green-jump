@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1760237771949260355
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 564812792755018685, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: m_Name
+      value: Obstacle_Red
+      objectReference: {fileID: 0}
+    - target: {fileID: 564812792755018684, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 564812792755018684, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 564812792755018684, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 564812792755018684, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 564812792755018680, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.7921569
+      objectReference: {fileID: 0}
+    - target: {fileID: 564812792755018680, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.13725491
+      objectReference: {fileID: 0}
+    - target: {fileID: 564812792755018680, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6312509269253465251, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: _color
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5684916439828900955, guid: d45728be1702a7242930dc36f865d8e2,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 48ea3d6196d0aa94fa255717907b29f9, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d45728be1702a7242930dc36f865d8e2, type: 3}

@@ -81,7 +81,7 @@ public class GameController: MonoBehaviour
     public void StartGame()
     {
         TransitionGameState(GameStateType.Running);
-        GlobalGameMoveSpeed = new Vector2(-11f, 0);
+        GlobalGameMoveSpeed = new Vector2(-9f, 0);
     }
 
     private void TransitionGameState(GameStateType newState)
@@ -94,11 +94,11 @@ public class GameController: MonoBehaviour
         }
     }
 
-    private void OnKeyPressed(KeyCode key)
+    private void OnKeyPressed(KeyAction action)
     {
-        switch (key)
+        switch (action)
         {
-            case KeyCode.Escape:
+            case KeyAction.Pause:
                 if (GameState == GameStateType.Running)
                 {
                     PauseGame();

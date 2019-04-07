@@ -55,22 +55,32 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnKeyPressed(KeyCode key)
+    private void OnKeyPressed(KeyAction action)
     {
-        switch (key)
+        if (gameController.GameState == GameStateType.Running)
         {
-            case KeyCode.T:
-                if (PlayerColor == PlayerColorType.Red)
-                {
-                    TransitionPlayerColor(PlayerColorType.Green);
-                }
-                else
-                {
-                    TransitionPlayerColor(PlayerColorType.Red);
-                }
-                break;
-            default:
-                break;
+            switch (action)
+            {
+                case KeyAction.ColorSwitch:
+                    if (PlayerColor == PlayerColorType.Red)
+                    {
+                        TransitionPlayerColor(PlayerColorType.Green);
+                    }
+                    else
+                    {
+                        TransitionPlayerColor(PlayerColorType.Red);
+                    }
+                    break;
+                case KeyAction.Jump:
+                    if (PlayerMovement == PlayerMovementType.Idle)
+                    {
+                        TransitionPlayerMovement(PlayerMovementType.Jumping);
+                        TimeSinceStartJump = 0f;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -90,14 +100,6 @@ public class PlayerController : MonoBehaviour
 
     private float TimeSinceStartJump = 0f;
 
-    private void Update()
-    {
-        if ((inputManager.GetVerticalAxis() > 0) && (PlayerMovement == PlayerMovementType.Idle))
-        {
-            TransitionPlayerMovement(PlayerMovementType.Jumping);
-            TimeSinceStartJump = 0f;
-        }
-    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -149,7 +151,7 @@ public class PlayerController : MonoBehaviour
     {
         // Check if collision can passthrough
         ObstacleProperties obsProps = collision.gameObject.GetComponent<ObstacleProperties>();
-
+        ObstacleMovement obsMove = collision.gameObject.GetComponent<ObstacleMovement>();
         if (obsProps != null)
         {
             if (IsCollided(obsProps.Color, PlayerColor))
@@ -160,6 +162,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 gameController.GameCollideScore += gameController.CorrectCollideScore;
+                obsMove.SetHit();
             }
         }
     }
