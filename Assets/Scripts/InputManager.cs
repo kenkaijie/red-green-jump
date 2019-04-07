@@ -7,13 +7,24 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-public class KeyPressedEvent: UnityEvent<KeyCode>
+public enum KeyAction
+{
+    Jump,
+    Pause,
+    ColorSwitch
+}
+
+public class KeyPressedEvent: UnityEvent<KeyAction>
 {
 
 }
 
 public class InputManager: MonoBehaviour
 {
+    public KeyCode JumpButton;
+    public KeyCode PauseButton;
+    public KeyCode ColorSwitchButton;
+
     public KeyPressedEvent OnKeyPressed = new KeyPressedEvent();
 
     public float GetVerticalAxis()
@@ -21,29 +32,25 @@ public class InputManager: MonoBehaviour
         return Input.GetAxis("Vertical");
     }
 
-    private void InvokeKeyPress(KeyCode key)
+    private void InvokeKeyPress(KeyAction action)
     {
-        Debug.Log("Pressed Key: " + key);
-        OnKeyPressed.Invoke(key);
+        Debug.Log("Pressed Action: " + action);
+        OnKeyPressed.Invoke(action);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(JumpButton))
         {
-            InvokeKeyPress(KeyCode.Escape);
+            InvokeKeyPress(KeyAction.Jump);
         }
-        else if (Input.GetKeyDown(KeyCode.T))
+        else if (Input.GetKeyDown(ColorSwitchButton))
         {
-            InvokeKeyPress(KeyCode.T);
+            InvokeKeyPress(KeyAction.ColorSwitch);
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (Input.GetKeyDown(PauseButton))
         {
-            InvokeKeyPress(KeyCode.UpArrow);
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            InvokeKeyPress(KeyCode.DownArrow);
+            InvokeKeyPress(KeyAction.Pause);
         }
     }
 

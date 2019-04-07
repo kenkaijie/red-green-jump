@@ -8,8 +8,6 @@ public class ObstacleMovement : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private Animator _animator;
 
-    [SerializeField]
-    private Vector2 Velocity = Vector2.zero;
 
     [SerializeField]
     private bool _isHit = false;
@@ -32,7 +30,6 @@ public class ObstacleMovement : MonoBehaviour
         {
             _rigidBody.velocity = gameController.GlobalGameMoveSpeed;
         }
-        Velocity = _rigidBody.velocity;
         if (_rigidBody.position.x <= -10f)
         {
             Destroy(gameObject);

@@ -94,11 +94,11 @@ public class GameController: MonoBehaviour
         }
     }
 
-    private void OnKeyPressed(KeyCode key)
+    private void OnKeyPressed(KeyAction action)
     {
-        switch (key)
+        switch (action)
         {
-            case KeyCode.Escape:
+            case KeyAction.Pause:
                 if (GameState == GameStateType.Running)
                 {
                     PauseGame();
