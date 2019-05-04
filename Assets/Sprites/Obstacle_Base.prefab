@@ -144,7 +144,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 0}
-  Velocity: {x: 0, y: 0}
   _isHit: 0
 --- !u!114 &6312509269253465251
 MonoBehaviour:

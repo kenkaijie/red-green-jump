@@ -30,7 +30,7 @@ public class ObstacleMovement : MonoBehaviour
         {
             _rigidBody.velocity = gameController.GlobalGameMoveSpeed;
         }
-        if (_rigidBody.position.x <= -10f)
+        if (_rigidBody.position.x <= -20f)
         {
             Destroy(gameObject);
         }

@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidBody;
     public float jumpForce = 7f;
     private Animator _animator;
-
+    private Vector2 _initialRigidBodyPosition;
     [SerializeField]
     private PlayerColorType _playerColor;
     public PlayerColorType PlayerColor { get => _playerColor; private set => _playerColor = value; }
@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
         gameController.OnGameStateChanged.AddListener(OnGameStateChanged);
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        _initialRigidBodyPosition = _rigidBody.position;
         TransitionPlayerColor(PlayerColorType.Green);
         TransitionPlayerMovement(PlayerMovementType.Idle);
         inputManager.OnKeyPressed.AddListener(OnKeyPressed);
@@ -107,13 +108,11 @@ public class PlayerController : MonoBehaviour
         {
             float nextPositionY = JumpHeightUnits * Mathf.Sin(Mathf.Abs(gameController.GlobalGameMoveSpeed.x) * Mathf.PI / JumpWidthUnits * TimeSinceStartJump);
             Vector2 nextPosition = _rigidBody.position;
-            nextPosition.y = nextPositionY;
-            if (nextPosition.y < 0f)
+            nextPosition.y = _initialRigidBodyPosition.y + nextPositionY;
+            if (nextPosition.y < _initialRigidBodyPosition.y)
             {
                 TransitionPlayerMovement(PlayerMovementType.Idle);
-                Vector2 zeroPosition = _rigidBody.position;
-                zeroPosition.y = 0f;
-                _rigidBody.MovePosition(zeroPosition);
+                _rigidBody.MovePosition(_initialRigidBodyPosition);
             }
             else
             {
