@@ -1616,7 +1616,9 @@ MonoBehaviour:
   _playerMovement: 0
   inputManager: {fileID: 1364778109}
   gameController: {fileID: 1364778110}
-  JumpSound: {fileID: 8300000, guid: 55b7a9f98cc14a04296938f764c39d64, type: 3}
+  JumpSounds:
+  - {fileID: 8300000, guid: 55b7a9f98cc14a04296938f764c39d64, type: 3}
+  - {fileID: 8300000, guid: 8761b46565087cd4cb997499e2d2ddb0, type: 3}
   _velocityY: 0
 --- !u!95 &714836048
 Animator:

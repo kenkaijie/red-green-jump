@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     public InputManager inputManager;
     public GameController gameController;
 
-    public AudioClip JumpSound;
+    public List<AudioClip> JumpSounds;
 
     // Start is called before the first frame update
     void Start()
@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
         if (PlayerMovement == PlayerMovementType.Jump)
         {
             _rigidBody.AddForce(jumpForce * Vector2.up, ForceMode2D.Impulse);
-            _audioSource.PlayOneShot(JumpSound);
+            _audioSource.PlayOneShot(ListUtilities.TakeRandom(JumpSounds));
             TransitionPlayerMovement(PlayerMovementType.Jumping);
             
         }
