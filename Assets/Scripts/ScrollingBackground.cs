@@ -13,38 +13,23 @@ public class ScrollingBackground : MonoBehaviour
 
     [SerializeField]
     private float _spriteWidth;
-    private bool _performMovement = true;
 
     private void Start()
     {
         centerPosition.z = transform.position.z;
         centerPosition.y = transform.position.y;
-        _spriteWidth = GetComponent<SpriteRenderer>().bounds.size.x-0.02f*scrollSpeed;
-        _performMovement = true;
-        gameController?.OnGameStateChanged.AddListener(OnGameStateChanged);
-    }
-
-    private void OnGameStateChanged(GameStateType newState)
-    {
-        if (newState == GameStateType.Paused)
-        {
-            _performMovement = false;
-        }
-        else if (newState == GameStateType.Running)
-        {
-            _performMovement = true;
-        }
+        _spriteWidth = GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
     private void Update()
     {
-        if (_performMovement)
+        if (gameController.IsMoving())
         {
             float movementX = (direction * scrollSpeed * Time.fixedDeltaTime);
             transform.position += movementX * Vector3.right;
             if ((transform.position - centerPosition).x < direction * _spriteWidth)
             {
-                transform.position = centerPosition - direction * _spriteWidth * Vector3.right;
+                transform.position += -3f * direction * _spriteWidth * Vector3.right;
             }
         }
     }

@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidBody;
     public float jumpForce = 7f;
     private Animator _animator;
+    private AudioSource _audioSource;
     private Vector2 _initialRigidBodyPosition;
     [SerializeField]
     private PlayerColorType _playerColor;
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public InputManager inputManager;
     public GameController gameController;
 
+    public AudioClip JumpSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,9 +40,10 @@ public class PlayerController : MonoBehaviour
         gameController.OnGameStateChanged.AddListener(OnGameStateChanged);
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         _initialRigidBodyPosition = _rigidBody.position;
         TransitionPlayerColor(PlayerColorType.Green);
-        TransitionPlayerMovement(PlayerMovementType.Idle);
+        TransitionPlayerMovement(PlayerMovementType.Run);
         inputManager.OnKeyPressed.AddListener(OnKeyPressed);
     }
 
@@ -55,6 +59,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
     }
+
 
     private void OnKeyPressed(KeyAction action)
     {
@@ -73,10 +78,9 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case KeyAction.Jump:
-                    if (PlayerMovement == PlayerMovementType.Idle)
+                    if (PlayerMovement == PlayerMovementType.Run)
                     {
-                        TransitionPlayerMovement(PlayerMovementType.Jumping);
-                        TimeSinceStartJump = 0f;
+                        TransitionPlayerMovement(PlayerMovementType.Jump);
                     }
                     break;
                 default:
@@ -88,43 +92,45 @@ public class PlayerController : MonoBehaviour
     private void Reset()
     {
         TransitionPlayerColor(PlayerColorType.Green);
-        TransitionPlayerMovement(PlayerMovementType.Idle);
+        TransitionPlayerMovement(PlayerMovementType.Run);
         _rigidBody.MovePosition(Vector2.zero);
         _rigidBody.MoveRotation(0f);
         _rigidBody.velocity = Vector2.zero;
         _rigidBody.angularVelocity = 0f;
     }
-    float Vx;
-    float Vy;
-    public float JumpHeightUnits = 4f;
-    public float JumpWidthUnits = 3.5f;
 
-    private float TimeSinceStartJump = 0f;
+    private float _savedInitialYPosition;
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if ((PlayerMovement == PlayerMovementType.Jumping))
+        if (PlayerMovement == PlayerMovementType.Jump)
         {
-            float nextPositionY = JumpHeightUnits * Mathf.Sin(Mathf.Abs(gameController.GlobalGameMoveSpeed.x) * Mathf.PI / JumpWidthUnits * TimeSinceStartJump);
-            Vector2 nextPosition = _rigidBody.position;
-            nextPosition.y = _initialRigidBodyPosition.y + nextPositionY;
-            if (nextPosition.y < _initialRigidBodyPosition.y)
-            {
-                TransitionPlayerMovement(PlayerMovementType.Idle);
-                _rigidBody.MovePosition(_initialRigidBodyPosition);
-            }
-            else
-            {
-                _rigidBody.MovePosition(nextPosition);
-            }
-            TimeSinceStartJump += Time.fixedDeltaTime;
+            _rigidBody.AddForce(jumpForce * Vector2.up, ForceMode2D.Impulse);
+            _audioSource.PlayOneShot(JumpSound);
+            TransitionPlayerMovement(PlayerMovementType.Jumping);
+            
+        }
+        else if (PlayerMovement == PlayerMovementType.Jumping && _rigidBody.velocity.y < 0f)
+        {
+            TransitionPlayerMovement(PlayerMovementType.Falling);
+        }
+        else if (PlayerMovement == PlayerMovementType.Falling && Mathf.Abs(_rigidBody.velocity.y) < 0.01f)
+        {
+            _rigidBody.velocity = Vector2.zero;
+            TransitionPlayerMovement(PlayerMovementType.Run);
+        }
+        else if (PlayerMovement == PlayerMovementType.Run && _rigidBody.velocity.y < 0f)
+        {
+            TransitionPlayerMovement(PlayerMovementType.Falling);
         }
 
-        gameController.GameTimeScore += Time.fixedDeltaTime;
+            _velocityY = _rigidBody.velocity.y;
 
     }
 
+    [SerializeField]
+    private float _velocityY;
 
     void TransitionPlayerMovement(PlayerMovementType newMovement)
     {
@@ -132,7 +138,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Transitioning player Color from" + PlayerMovement + " -> " + newMovement);
             PlayerMovement = newMovement;
-            _animator.SetBool("IsJumping", newMovement == PlayerMovementType.Jumping);
+            _animator.SetBool("IsJumping",PlayerMovement != PlayerMovementType.Run);
         }
     }
 
@@ -143,26 +149,22 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Transitioning player Color from" + PlayerColor + " -> " + newColor);
             PlayerColor = newColor;
             _animator.SetBool("IsGreen", newColor == PlayerColorType.Green);
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        // Check if collision can passthrough
-        ObstacleProperties obsProps = collision.gameObject.GetComponent<ObstacleProperties>();
-        ObstacleMovement obsMove = collision.gameObject.GetComponent<ObstacleMovement>();
-        if (obsProps != null)
-        {
-            if (IsCollided(obsProps.Color, PlayerColor))
+            if (PlayerColor == PlayerColorType.Green)
             {
-                Debug.Log(string.Format("Collided {0} -> {1}", PlayerColor, obsProps.Color));
-                gameController.GameCollideScore += gameController.IncorrectCollideScore;
+                gameObject.layer = LayerMask.NameToLayer("PlayerGreen");
             }
             else
             {
-                gameController.GameCollideScore += gameController.CorrectCollideScore;
-                obsMove.SetHit();
+                gameObject.layer = LayerMask.NameToLayer("PlayerRed");
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.name == "GameOverCollider")
+        {
+            gameController.TriggerGameOver();
         }
     }
 
