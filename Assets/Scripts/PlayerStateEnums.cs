@@ -17,6 +17,8 @@ public enum PlayerColorType
 
 public enum PlayerMovementType
 {
-    Idle,
-    Jumping
+    Run,
+    Jump,
+    Jumping,
+    Falling
 }

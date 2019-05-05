@@ -24,11 +24,7 @@ public enum GameStateType
     /// <summary>
     /// Game is about to resume
     /// </summary>
-    Resuming,
-    /// <summary>
-    /// Pause has been requested
-    /// </summary>
-    Paused,
+    Commencing,
     /// <summary>
     /// Game Over
     /// </summary>
@@ -45,33 +41,43 @@ public class GameController: MonoBehaviour
     public int IncorrectCollideScore = -3;
     public int CorrectCollideScore = 1;
 
-    public Vector2 GlobalGameMoveSpeed;
+    public float BaseMoveSpeed = -5f;
 
-    private int _gameCollideScore;
-    public int GameCollideScore { get => _gameCollideScore; set => _gameCollideScore = Math.Max(0, value); }
-    public float GameTimeScore { get; set; }
+    public float GlobalGameMoveSpeed;
+
+    public bool IsMoving()
+    {
+        return Mathf.Abs(GlobalGameMoveSpeed) > 0f;
+    }
+
+    private float _gameRunTime = 0f;
+    public int GameScore { get; set; }
+
     public GameModeType GameMode;
     public GameStateType GameState;
 
-    public GameObject PauseMenu;
+    public GameObject GameOverScreen;
     public InputManager inputManager;
     public OnGameStateChangedEvent OnGameStateChanged = new OnGameStateChangedEvent();
     public GameObject CountdownTextField;
 
+    // Difficulty Scaling Variables
+    public float DifficultyScale;
+    public float DifficultyRampRatePerSecond = 1f;
+    public float MaxDifficultyScale = 200f;
+
     private void Start()
     {
-        GlobalGameMoveSpeed = Vector2.zero;
+        GlobalGameMoveSpeed = BaseMoveSpeed;
         TransitionGameState(GameStateType.Idle);
-        inputManager.OnKeyPressed.AddListener(OnKeyPressed);
         ResetScore();
         StartCoroutine(CountdownResume());
-        PauseMenu.SetActive(false);
+        GameOverScreen.SetActive(false);
     }
 
     IEnumerator CountdownResume()
     {
-        PauseMenu.SetActive(false);
-        TransitionGameState(GameStateType.Resuming);
+        TransitionGameState(GameStateType.Commencing);
         CountdownTextField.SetActive(true);
         Text textfield = CountdownTextField.GetComponent<Text>();
         textfield.text = "3";
@@ -83,13 +89,18 @@ public class GameController: MonoBehaviour
         textfield.text = "G";
         yield return new WaitForSecondsRealtime(0.5f);
         CountdownTextField.SetActive(false);
-        StartGame();
+        TransitionGameState(GameStateType.Running);
     }
 
-    public void StartGame()
+    private void FixedUpdate()
     {
-        TransitionGameState(GameStateType.Running);
-        GlobalGameMoveSpeed = new Vector2(-9f, 0);
+        if (GameState == GameStateType.Running)
+        {
+            _gameRunTime += Time.fixedDeltaTime;
+            GameScore = Mathf.RoundToInt(_gameRunTime);
+            DifficultyScale = Mathf.Min(MaxDifficultyScale, GameScore * DifficultyRampRatePerSecond);
+            GlobalGameMoveSpeed = BaseMoveSpeed * (1f + DifficultyScale / 100f);
+        }
     }
 
     private void TransitionGameState(GameStateType newState)
@@ -102,42 +113,18 @@ public class GameController: MonoBehaviour
         }
     }
 
-    private void OnKeyPressed(KeyAction action)
-    {
-        switch (action)
-        {
-            case KeyAction.Pause:
-                if (GameState == GameStateType.Running)
-                {
-                    PauseGame();
-                }
-                else if (GameState == GameStateType.Paused)
-                {
-                    UnpauseGame();
-                    
-                }
-                break;
-            default:
-                // do nothing
-                break;
-        }
-    }
-
-    public void PauseGame()
-    {
-        TransitionGameState(GameStateType.Paused);
-        GlobalGameMoveSpeed = Vector2.zero;
-        PauseMenu.SetActive(true);
-    }
-
-    public void UnpauseGame()
-    {
-        StartCoroutine(CountdownResume());
-    }
-
     public void ResetScore()
     {
-        GameCollideScore = 0;
-        GameTimeScore = 0f;
+        GameScore = 0;
+        _gameRunTime = 0f;
+        DifficultyScale = 0f;
+    }
+
+    public void TriggerGameOver()
+    {
+        // show game over screen
+        TransitionGameState(GameStateType.Finish);
+        GlobalGameMoveSpeed = 0f;
+        GameOverScreen.SetActive(true);
     }
 }

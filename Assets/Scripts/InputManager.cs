@@ -10,7 +10,6 @@ using UnityEngine.Events;
 public enum KeyAction
 {
     Jump,
-    Pause,
     ColorSwitch
 }
 
@@ -22,7 +21,6 @@ public class KeyPressedEvent: UnityEvent<KeyAction>
 public class InputManager: MonoBehaviour
 {
     public KeyCode JumpButton;
-    public KeyCode PauseButton;
     public KeyCode ColorSwitchButton;
 
     public KeyPressedEvent OnKeyPressed = new KeyPressedEvent();
@@ -47,10 +45,6 @@ public class InputManager: MonoBehaviour
         else if (Input.GetKeyDown(ColorSwitchButton))
         {
             InvokeKeyPress(KeyAction.ColorSwitch);
-        }
-        else if (Input.GetKeyDown(PauseButton))
-        {
-            InvokeKeyPress(KeyAction.Pause);
         }
     }
 
