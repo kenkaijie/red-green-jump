@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -81,15 +82,22 @@ public class GameController: MonoBehaviour
     {
         TransitionGameState(GameStateType.Commencing);
         CountdownTextField.SetActive(true);
-        Text textfield = CountdownTextField.GetComponent<Text>();
+        TextMeshProUGUI textfield = CountdownTextField.GetComponent<TextMeshProUGUI>();
+        Animator textfieldAnimator = CountdownTextField.GetComponent<Animator>();
+
         textfield.text = "3";
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSeconds(1f);
+
         textfield.text = "2";
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSeconds(1f);
+
         textfield.text = "1";
-        yield return new WaitForSecondsRealtime(1f);
-        textfield.text = "G";
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSeconds(1f);
+
+        textfield.text = "JUMP!";
+        textfieldAnimator.SetTrigger("jumpIn");
+        yield return new WaitForSeconds(0.6f);
+
         CountdownTextField.SetActive(false);
         TransitionGameState(GameStateType.Running);
     }
