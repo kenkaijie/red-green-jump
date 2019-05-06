@@ -8,7 +8,7 @@ public class PlatformGenerator : MonoBehaviour
     public List<float> SpawnableYOffsets;
     public float HardMinPlatformWidth = 5f;
     public float HardMaxPlatformWidth = 5f;
-    public float MinPlatformWidth = 5f;
+    public float MinPlatformWidth = 10f;
     public float MaxPlatformWidth = 30f;
     public float HardAllowedReactionTimeSeconds = 0.3f;
     public float allowedReactionTimeSeconds = 0.35f;

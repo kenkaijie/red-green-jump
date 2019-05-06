@@ -56,6 +56,7 @@ public class GameController: MonoBehaviour
     public GameModeType GameMode;
     public GameStateType GameState;
 
+    public GameObject HUDComponent;
     public GameObject GameOverScreen;
     public InputManager inputManager;
     public OnGameStateChangedEvent OnGameStateChanged = new OnGameStateChangedEvent();
@@ -73,6 +74,7 @@ public class GameController: MonoBehaviour
         ResetScore();
         StartCoroutine(CountdownResume());
         GameOverScreen.SetActive(false);
+        HUDComponent.SetActive(true);
     }
 
     IEnumerator CountdownResume()
@@ -126,5 +128,6 @@ public class GameController: MonoBehaviour
         TransitionGameState(GameStateType.Finish);
         GlobalGameMoveSpeed = 0f;
         GameOverScreen.SetActive(true);
+        HUDComponent.SetActive(false);
     }
 }
