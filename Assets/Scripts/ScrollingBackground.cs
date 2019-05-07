@@ -9,10 +9,14 @@ public class ScrollingBackground : MonoBehaviour
     public float scrollSpeed = 1f;
     public Vector3 centerPosition = Vector3.zero;
 
-    public GameController gameController;
-
     [SerializeField]
-    private float _spriteWidth;
+    private float _spriteWidth = 0f;
+    private bool _doMovement = false;
+
+    public void SetMotionState(bool doMovement)
+    {
+        _doMovement = doMovement;
+    }
 
     private void Start()
     {
@@ -23,7 +27,7 @@ public class ScrollingBackground : MonoBehaviour
 
     private void Update()
     {
-        if (gameController.IsMoving())
+        if (_doMovement)
         {
             float movementX = (direction * scrollSpeed * Time.fixedDeltaTime);
             transform.position += movementX * Vector3.right;
