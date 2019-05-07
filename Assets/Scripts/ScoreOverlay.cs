@@ -17,7 +17,7 @@ public class ScoreOverlay : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         _textComponent.text = string.Format(FormattedString, gamecontroller.GameScore);
     }

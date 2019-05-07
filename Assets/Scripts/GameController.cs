@@ -19,13 +19,14 @@ public enum GameStateType
     /// </summary>
     Idle,
     /// <summary>
+    /// Game is about to start
+    /// </summary>
+    Commencing,
+    /// <summary>
     /// Running the game!
     /// </summary>
     Running,
-    /// <summary>
-    /// Game is about to resume
-    /// </summary>
-    Commencing,
+    Paused,
     /// <summary>
     /// Game Over
     /// </summary>
@@ -63,22 +64,72 @@ public class GameController: MonoBehaviour
     public OnGameStateChangedEvent OnGameStateChanged = new OnGameStateChangedEvent();
     public GameObject CountdownTextField;
 
+    // Parallax Background Scroller
+    public BackgroundManager _backgroundManager;
+
+    // User Settings
+    public UserSettingMonoBehaviour UserSettings;
+
+    // Audio Settings
+    public GameMusicManager AudioManager;
+
     // Difficulty Scaling Variables
     public float DifficultyScale;
     public float DifficultyRampRatePerSecond = 1f;
     public float MaxDifficultyScale = 200f;
 
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
     private void Start()
     {
+        var settings = UserSettings.ReadSettings();
+        AudioManager.GameEffectsVolume = settings.EffectsVolume;
+        AudioManager.GameMusicVolume = settings.MusicVolume;
         GlobalGameMoveSpeed = BaseMoveSpeed;
         TransitionGameState(GameStateType.Idle);
         ResetScore();
+
         StartCoroutine(CountdownResume());
+
+        _backgroundManager.SetMotionState(true);
         GameOverScreen.SetActive(false);
         HUDComponent.SetActive(true);
+        inputManager.OnKeyPressed.AddListener(OnKeyPressed);
     }
 
-    IEnumerator CountdownResume()
+    private void OnKeyPressed(KeyAction key)
+    {
+        if (key == KeyAction.Pause)
+        {
+            if (GameState == GameStateType.Running)
+            {
+                SetPauseState(true);
+            }
+        }
+    }
+
+    public void SetPauseState(bool doPause)
+    {
+        if (doPause)
+        {
+            TransitionGameState(GameStateType.Paused);
+            GlobalGameMoveSpeed = 0f;
+            Time.timeScale = 0f;
+            _backgroundManager.SetMotionState(false);
+        }
+        else
+        {
+            _backgroundManager.SetMotionState(true);
+            Time.timeScale = 1f;
+            GlobalGameMoveSpeed = BaseMoveSpeed * (1f + DifficultyScale / 100f);
+            TransitionGameState(GameStateType.Running);
+        }
+    }
+
+    private IEnumerator CountdownResume()
     {
         TransitionGameState(GameStateType.Commencing);
         CountdownTextField.SetActive(true);
@@ -135,6 +186,7 @@ public class GameController: MonoBehaviour
         // show game over screen
         TransitionGameState(GameStateType.Finish);
         GlobalGameMoveSpeed = 0f;
+        _backgroundManager.SetMotionState(false);
         GameOverScreen.SetActive(true);
         HUDComponent.SetActive(false);
     }
