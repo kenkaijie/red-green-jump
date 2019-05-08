@@ -63,7 +63,7 @@ public class GameController: MonoBehaviour
     public InputManager inputManager;
     public OnGameStateChangedEvent OnGameStateChanged = new OnGameStateChangedEvent();
     public GameObject CountdownTextField;
-
+    public GameObject InstructionObject;
     // Parallax Background Scroller
     public BackgroundManager _backgroundManager;
 
@@ -133,8 +133,8 @@ public class GameController: MonoBehaviour
     {
         TransitionGameState(GameStateType.Commencing);
         CountdownTextField.SetActive(true);
+        InstructionObject.SetActive(true);
         TextMeshProUGUI textfield = CountdownTextField.GetComponent<TextMeshProUGUI>();
-        Animator textfieldAnimator = CountdownTextField.GetComponent<Animator>();
 
         textfield.text = "3";
         yield return new WaitForSeconds(1f);
@@ -144,11 +144,8 @@ public class GameController: MonoBehaviour
 
         textfield.text = "1";
         yield return new WaitForSeconds(1f);
-
-        textfield.text = "JUMP!";
-        textfieldAnimator.SetTrigger("jumpIn");
-        yield return new WaitForSeconds(0.6f);
-
+ 
+        InstructionObject.SetActive(false);
         CountdownTextField.SetActive(false);
         TransitionGameState(GameStateType.Running);
     }
